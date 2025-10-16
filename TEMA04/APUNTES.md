@@ -1,9 +1,8 @@
-## 💻 **APUNTES_TEMA_4.md**
-**Tema 4: Manejo de Conectores I (JDBC en Java)**
+# Tema 4: Manejo de Conectores I (JDBC en Java)
 
 ---
 
-### 1️⃣ Introducción
+## 1️⃣ Introducción
 En este tema aprenderás a **conectar una aplicación Java con una base de datos** usando **JDBC (Java Database Connectivity)**.  
 Se estudian los **tipos de conectores**, el **desfase objeto-relacional**, y cómo realizar operaciones con la clase `DriverManager`.
 
@@ -15,7 +14,10 @@ Se estudian los **tipos de conectores**, el **desfase objeto-relacional**, y có
 
 ---
 
-### 2️⃣ El Desfase Objeto–Relacional
+## 2️⃣ Introducción al manejo de conectores
+
+### 2.1. El Desfase Objeto–Relacional
+
 El **desfase objeto–relacional** aparece cuando una aplicación orientada a objetos (Java) interactúa con una **base de datos relacional**.  
 Las estructuras de datos no siempre coinciden, por lo que se necesita un conector que traduzca ambos mundos.
 
@@ -27,7 +29,7 @@ El **conector JDBC** se encarga de traducir estos objetos a datos relacionales (
 
 ---
 
-### 3️⃣ Protocolos de Acceso a Base de Datos
+### 2.2. Protocolos de Acceso a Base de Datos
 Los principales protocolos son:
 
 | Protocolo | Desarrollado por | Uso |
@@ -35,20 +37,29 @@ Los principales protocolos son:
 | **JDBC (Java Database Connectivity)** | Sun Microsystems | Conectar Java a bases de datos. |
 | **ODBC (Open Database Connectivity)** | Microsoft | Conexiones universales en Windows. |
 
-👉 JDBC es el estándar en Java y el más usado actualmente.
+👉 JDBC es el estándar en Java y el más usado actualmente. 
+
+![alt text](./img/conector-JDBC.png)
 
 ---
+## 3️⃣ Conexiones: Componentes y tipos
+4️⃣5️⃣
 
-### 4️⃣ Componentes del Conector JDBC
+### 3.1. Componentes del Conector JDBC
 
 1. **API JDBC** → Librerías y clases de `java.sql` y `javax.sql` para acceder a bases de datos.  
 2. **Gestor JDBC** → Intermediario entre la aplicación y el driver.  
 3. **Driver JDBC** → Implementación específica para cada base de datos (MySQL, Oracle, PostgreSQL...).  
 4. **Puente JDBC-ODBC** → Permite usar drivers ODBC como si fueran JDBC.
 
+**Arquitecturas:**
+- **Dos capas** = conexión directa (aplicación ↔ base de datos).
+- **Tres capas** = conexión indirecta (aplicación ↔ middleware ↔ base de datos).
+
 ---
 
-### 5️⃣ Tipos de Drivers JDBC
+### 3.2. Tipos de Drivers JDBC
+
 | Tipo | Descripción | Características |
 |------|--------------|-----------------|
 | **Tipo 1: JDBC-ODBC** | Usa puente ODBC. | Obsoleto, lento, multiplataforma limitada. |
@@ -56,11 +67,14 @@ Los principales protocolos son:
 | **Tipo 3: Net** | Comunicación mediante middleware. | Flexible y escalable. |
 | **Tipo 4: Protocolo Nativo** | Implementado 100% en Java. | Más usado, portable, rápido. |
 
-💡 **Ejemplo:** Driver MySQL → `com.mysql.cj.jdbc.Driver`
+👉 En resumen:
+
+- Para aplicaciones simples → dos capas (cliente + BDD)
+- Para aplicaciones grandes o con muchas consultas → tres capas (cliente + middleware + BDD)
 
 ---
 
-### 6️⃣ Conexión en Código Java
+### 5️⃣ Conexión en Código Java
 Para conectar Java con una base de datos se necesita:
 
 1. **Descargar el driver JDBC (.jar)** del motor de base de datos.  
@@ -194,17 +208,6 @@ finally {
 
 ---
 
-### 🔟 Caso Práctico: Registro de Usuarios
-Una empresa necesita una aplicación que guarde usuarios con nombre, email y contraseña.  
-Usamos una arquitectura **de dos capas** (aplicación + base de datos) con el conector JDBC tipo 4.
-
-```java
-INSERT INTO usuarios (nombre, email, password)
-VALUES ('Carlos', 'carlos@mail.com', '1234');
-```
-
----
-
 ### 🔢 Resumen del Tema
 ✅ Conceptos clave:
 - El conector **JDBC** permite comunicar Java con bases de datos.  
@@ -221,4 +224,3 @@ VALUES ('Carlos', 'carlos@mail.com', '1234');
 
 ---
 
-## 🖥️ **Fin del Tema 4**
