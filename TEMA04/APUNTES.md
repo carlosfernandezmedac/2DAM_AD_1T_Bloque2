@@ -1,189 +1,224 @@
-# Tema 4: Diseño Conceptual – Modelo Entidad/Relación
+## 💻 **APUNTES_TEMA_4.md**
+**Tema 4: Manejo de Conectores I (JDBC en Java)**
 
 ---
 
-## 1. Introducción
-El modelo **Entidad/Relación (E/R)** permite representar visualmente la realidad que queremos almacenar en una **base de datos**, identificando **entidades, atributos y relaciones** entre los datos.
+### 1️⃣ Introducción
+En este tema aprenderás a **conectar una aplicación Java con una base de datos** usando **JDBC (Java Database Connectivity)**.  
+Se estudian los **tipos de conectores**, el **desfase objeto-relacional**, y cómo realizar operaciones con la clase `DriverManager`.
 
-**El modelo de datos actúa como un mapa, organizando la información que queremos almacenar.**
-
-👉 Es la **fase de diseño conceptual**, donde se definen los elementos clave sin depender del SGBD.
-
-![alt text](./img/er-intro.png)
-
-
-## 2. El modelo de datos
-
-### 2.1. Concepto
-Un **modelo de datos** es un conjunto de herramientas conceptuales que permiten describir la información y su estructura. Nos ayuda a estructurar la realidad. Se compone de:
-- **Estructura:** tipos de datos y relaciones.
-- **Operaciones:** acciones que pueden realizarse.
-- **Restricciones:** condiciones que aseguran la validez de los datos.
-
-Para llevar a cabo la definición de la estructura, operaciones y restricciones, debemos hacer uso de dos de los
-
-- **Lenguaje de Definición de Datos (DDL)**: Describe las estructuras de datos y las restricciones de integridad.
-definiendo los elementos permitidos y cómo utilizarlos.
-- **Lenguaje de Manipulación de Datos (DML)**: Describe las operaciones de manipulación de datos mediante expresiones y operadores.
-
-![alt text](./img/modelo-esquema.png)
-
-💡 **Diferencia clave:**
-| Concepto | Definición |
-|-----------|-------------|
-| **Modelo de datos** | Herramienta conceptual para representar información. |
-| **Esquema** | Aplicación del modelo de datos a un caso concreto. |
-
-📘 Ejemplo:
-
-**Modelo de datos**: Modelo E/R (entidades, relaciones, atributos).
-
-**Esquema**: Entidades: Alumno, Profesor, Curso; Relaciones: Imparte, Matricula.
+💡 **Objetivos del tema:**
+- Comprender el concepto de **conector JDBC**.  
+- Conocer los **protocolos JDBC y ODBC**.  
+- Aprender a **configurar conexiones** a base de datos.  
+- Realizar operaciones CRUD (Create, Read, Update, Delete) con código Java.
 
 ---
 
-### 2.2. Tipos de modelos
+### 2️⃣ El Desfase Objeto–Relacional
+El **desfase objeto–relacional** aparece cuando una aplicación orientada a objetos (Java) interactúa con una **base de datos relacional**.  
+Las estructuras de datos no siempre coinciden, por lo que se necesita un conector que traduzca ambos mundos.
 
-| Tipo | Descripción | Ejemplo |
-|------|--------------|---------|
-| **Conceptual** | Representa la realidad sin depender del SGBD. | Modelo E/R |
-| **Convencional (Lógico)** | Prepara los datos para implementarlos en un SGBD. | Modelo relacional |
-| **Físico** | Define cómo se almacenan realmente los datos. | Archivos, índices |
+📘 **Ejemplo:**
+- En Java usamos **clases y objetos**.  
+- En la base de datos usamos **tablas y registros**.
 
----
-
-## 3. Fases del diseño de una base de datos
-
-1. **Análisis de requisitos** – Qué datos se necesitan.  
-2. **Diseño conceptual** – Se elabora el **modelo E/R**.  
-3. **Diseño lógico** – Se adapta al tipo de base de datos (relacional, orientada a objetos, etc.).  
-4. **Diseño físico** – Se implementa en un SGBD concreto.
-
-![alt text](./img/fases-diseno.png)
+El **conector JDBC** se encarga de traducir estos objetos a datos relacionales (filas y columnas).
 
 ---
 
-## 4. El modelo Entidad/Relación (E/R)
+### 3️⃣ Protocolos de Acceso a Base de Datos
+Los principales protocolos son:
 
-Creado por **Peter Chen (1976)**, este modelo representa los datos mediante tres elementos:
-- **Entidades:** objetos o conceptos.  
-- **Atributos:** características de esos objetos.  
-- **Relaciones:** vínculos entre entidades.
+| Protocolo | Desarrollado por | Uso |
+|------------|------------------|-----|
+| **JDBC (Java Database Connectivity)** | Sun Microsystems | Conectar Java a bases de datos. |
+| **ODBC (Open Database Connectivity)** | Microsoft | Conexiones universales en Windows. |
 
-![alt text](./img/modelo-er-esquema.png)
-
----
-
-## 5. Las entidades
-
-Una **entidad** representa un objeto del mundo real (persona, producto, curso…).
-
-### Tipos de entidades
-| Tipo | Descripción | Ejemplo |
-|------|--------------|----------|
-| **Fuerte** | Existe por sí misma. | LIBRO |
-| **Débil** | Depende de otra entidad. | CAPÍTULO (depende de LIBRO) |
-
-
-### Representación gráfica
-- **Entidad fuerte:** rectángulo.  
-- **Entidad débil:** doble rectángulo.
-
-![alt text](./img/entidad-fuerte.png)
+👉 JDBC es el estándar en Java y el más usado actualmente.
 
 ---
 
-## 6. Los atributos
+### 4️⃣ Componentes del Conector JDBC
 
-Los **atributos** describen las características de una entidad o relación. Ejemplo: ALUMNO (nombre, edad, DNI).
-
-### 6.1. Dominio
-Conjunto de valores permitidos para un atributo. Ejemplo: `edad → 0–120`.
-
-### 6.2. Representación
-- Elipse unida a la entidad o relación.
-
-![alt text](./img/atributo-representacion.png)
-
-
-### 6.3. Tipos de atributos
-| Tipo | Descripción | Ejemplo |
-|------|--------------|----------|
-| **Identificativo** | Distingue una entidad de otra. | DNI |
-| **Descriptivo** | Aporta información adicional. | Nombre |
-| **Derivado** | Calculado a partir de otros. | Edad (fecha de nacimiento) |
-| **Multivaluado** | Varios valores posibles. | Teléfono |
-| **Compuesto** | Se divide en subatributos. | Dirección → calle, nº, ciudad |
-| **Opcional** | Dato que puede ser nulo. | Correo (puede que no tengan) |
-
-![alt text](./img/atributos-tipos.png)
+1. **API JDBC** → Librerías y clases de `java.sql` y `javax.sql` para acceder a bases de datos.  
+2. **Gestor JDBC** → Intermediario entre la aplicación y el driver.  
+3. **Driver JDBC** → Implementación específica para cada base de datos (MySQL, Oracle, PostgreSQL...).  
+4. **Puente JDBC-ODBC** → Permite usar drivers ODBC como si fueran JDBC.
 
 ---
 
-## 7. Las relaciones
+### 5️⃣ Tipos de Drivers JDBC
+| Tipo | Descripción | Características |
+|------|--------------|-----------------|
+| **Tipo 1: JDBC-ODBC** | Usa puente ODBC. | Obsoleto, lento, multiplataforma limitada. |
+| **Tipo 2: Nativo** | Parte Java, parte código nativo. | Rápido pero dependiente del sistema. |
+| **Tipo 3: Net** | Comunicación mediante middleware. | Flexible y escalable. |
+| **Tipo 4: Protocolo Nativo** | Implementado 100% en Java. | Más usado, portable, rápido. |
 
-Representan asociaciones entre entidades. Se dibujan con **rombos**.
-
-Ejemplo: AUTOR — PUBLICA — LIBRO
-
-![alt text](./img/relaciones.png)
-
-### 7.1. Grado de una relación
-| Tipo | Descripción | Ejemplo |
-|------|--------------|----------|
-| **Binaria (2)** | Dos entidades | CLIENTE–PEDIDO |
-| **Ternaria (3)** | Tres entidades | ALUMNO–ASIGNATURA–PROFESOR |
-| **Reflexiva** | Una entidad consigo misma | EMPLEADO supervisa EMPLEADO |
-| **dobles** | diferentes relaciones entre las mismas entidades | EMPLEADO supervisa EMPLEADO |
-
-![alt text](./img/relaciones1.png)
-
-**Ejemplo relación reflexiva**
-- ¿Cuántos subordinados puede tener un jefe? Un jefe puede tener un mínimo de 1 y un máximo de n (1,n)
-- ¿Cuántos jefes puede tener un subordinado? Un mínimo de 0 (un empleado sin jefes sería el responsable de una empresa) y un máximo de 1. (0,1)
-- Por tanto la cardinalidadsería de 1:N
-
-![alt text](./img/reflexiva1.png)
-
-Normalmente definen el papel de una entidad en la relación.
-
-Ejemplo: EMPLEADO (supervisor / supervisado)
-
-![alt text](./img/reflexiva.png)
-
-
-**Ejemplo de ralación ternaria**
-
-| Entidad    | Interpretación                                                   | Participación | Cardinalidad                                         |
-|-------------|------------------------------------------------------------------|----------------|------------------------------------------------------|
-| **AUTOR**   | Un autor puede escribir varios libros en distintas editoriales. | Total (1,n)    | Un autor participa en una o más publicaciones.       |
-| **LIBRO**   | Cada libro pertenece a un solo autor y una sola editorial.       | Total (1,1)    | Cada libro está asociado exactamente con un autor y una editorial. |
-| **EDITORIAL** | Una editorial puede publicar muchos libros de distintos autores. | Total (1,n)    | Cada editorial participa en una o más publicaciones. |
-
-Relación ternaria PUBLICA con cardinalidades (1 : n : n) entre AUTOR, LIBRO y EDITORIAL
-
-![alt text](./img/ternaria.png)
-
-### 7.2. Cardinalidad
-Indica cuántas veces una entidad participa en una relación.
-
-| Tipo | Descripción | Ejemplo |
-|------|--------------|----------|
-| **1:1** | Un elemento se relaciona con uno. | Persona–DNI |
-| **1:N** | Uno con muchos. | PROFESOR–ASIGNATURA |
-| **M:N** | Muchos con muchos. | ALUMNO–ASIGNATURA |
-
-
-### 7.3. Cardinalidad mínima y máxima
-Ejemplo: Un **autor** puede escribir *(1,N)* libros; un **libro** puede tener *(0,N)* autores.
-
-![alt text](./img/cardinalidad-minmax.png)
+💡 **Ejemplo:** Driver MySQL → `com.mysql.cj.jdbc.Driver`
 
 ---
 
-## 10. Bibliografía y recursos
-- Elmasri & Navathe (2007). *Fundamentos de sistemas de bases de datos*. Addison Wesley.  
-- López, I., Castellano, M. J. & Ospino, J. (2011). *Bases de datos*. Garceta.  
-- [TuInstitutoOnline – Tipos de atributos](https://www.tuinstitutoonline.com/cursos/baseavanzado1_v1606/03atributos.php)  
-- [Helisulbaran – Diagrama Entidad Relación](https://helisulbaransistemas.blogspot.com/2016/11/modelo-entidad-relacion-el-modelo.html)
+### 6️⃣ Conexión en Código Java
+Para conectar Java con una base de datos se necesita:
 
+1. **Descargar el driver JDBC (.jar)** del motor de base de datos.  
+2. **Añadirlo al classpath del proyecto.**  
+3. **Definir variables de conexión.**  
+
+📘 **Ejemplo básico:**
+```java
+private static final String DRIVER = "com.mysql.cj.jdbc.Driver";
+private static final String URL = "jdbc:mysql://localhost:3306/empresa";
+private static final String USUARIO = "root";
+private static final String PASSWORD = "1234";
+
+public static Connection getConnection() throws SQLException, ClassNotFoundException {
+    Class.forName(DRIVER);
+    return DriverManager.getConnection(URL, USUARIO, PASSWORD);
+}
+```
+
+---
+
+### 7️⃣ Ejemplo CRUD Completo (Java + JDBC)
+
+Este ejemplo muestra cómo realizar operaciones **Create, Read, Update y Delete** sobre una tabla `clientes`.
+
+#### 🧩 Estructura de la tabla
+```sql
+CREATE TABLE clientes (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  nombre VARCHAR(50),
+  ciudad VARCHAR(50),
+  edad INT
+);
+```
+
+#### 📘 Clase de Conexión
+```java
+import java.sql.*;
+
+public class ConexionDB {
+    private static final String URL = "jdbc:mysql://localhost:3306/empresa";
+    private static final String USER = "root";
+    private static final String PASSWORD = "1234";
+
+    public static Connection conectar() {
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            return DriverManager.getConnection(URL, USER, PASSWORD);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+}
+```
+
+---
+
+#### 🟩 CREATE – Insertar datos
+```java
+Connection con = ConexionDB.conectar();
+String sql = "INSERT INTO clientes (nombre, ciudad, edad) VALUES (?, ?, ?)";
+PreparedStatement ps = con.prepareStatement(sql);
+ps.setString(1, "Lucía");
+ps.setString(2, "Sevilla");
+ps.setInt(3, 28);
+ps.executeUpdate();
+System.out.println("Registro insertado correctamente");
+```
+
+---
+
+#### 🟦 READ – Consultar datos
+```java
+Statement st = con.createStatement();
+ResultSet rs = st.executeQuery("SELECT * FROM clientes");
+while (rs.next()) {
+    System.out.println(rs.getInt("id") + " - " + rs.getString("nombre") + 
+                       " - " + rs.getString("ciudad") + " - " + rs.getInt("edad"));
+}
+```
+
+---
+
+#### 🟨 UPDATE – Modificar datos
+```java
+String updateSQL = "UPDATE clientes SET ciudad=? WHERE id=?";
+PreparedStatement ps2 = con.prepareStatement(updateSQL);
+ps2.setString(1, "Málaga");
+ps2.setInt(2, 1);
+int filas = ps2.executeUpdate();
+System.out.println(filas + " registro(s) actualizado(s)");
+```
+
+---
+
+#### 🟥 DELETE – Eliminar datos
+```java
+String deleteSQL = "DELETE FROM clientes WHERE id=?";
+PreparedStatement ps3 = con.prepareStatement(deleteSQL);
+ps3.setInt(1, 1);
+int borrados = ps3.executeUpdate();
+System.out.println(borrados + " registro(s) eliminado(s)");
+```
+
+---
+
+### 8️⃣ Excepciones y Cierre de Conexiones
+Siempre se deben cerrar las conexiones para liberar recursos.
+
+```java
+finally {
+    try {
+        if (ps != null) ps.close();
+        if (con != null) con.close();
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+}
+```
+
+---
+
+### 9️⃣ Ventajas e Inconvenientes de los Conectores
+| Tipo | Ventajas | Inconvenientes |
+|------|-----------|----------------|
+| **Tipo 1** | Incluido en Java, fácil de usar. | Lento, dependiente de ODBC. |
+| **Tipo 2** | Rápido, acceso nativo. | No multiplataforma. |
+| **Tipo 3** | Escalable, ideal para internet. | Necesita middleware. |
+| **Tipo 4** | 100% Java, portable y eficiente. | Requiere driver por base de datos. |
+
+---
+
+### 🔟 Caso Práctico: Registro de Usuarios
+Una empresa necesita una aplicación que guarde usuarios con nombre, email y contraseña.  
+Usamos una arquitectura **de dos capas** (aplicación + base de datos) con el conector JDBC tipo 4.
+
+```java
+INSERT INTO usuarios (nombre, email, password)
+VALUES ('Carlos', 'carlos@mail.com', '1234');
+```
+
+---
+
+### 🔢 Resumen del Tema
+✅ Conceptos clave:
+- El conector **JDBC** permite comunicar Java con bases de datos.  
+- Existen distintos tipos de drivers (1–4).  
+- `DriverManager` gestiona las conexiones.  
+- Se pueden ejecutar sentencias SQL con `Statement` y `PreparedStatement`.  
+- Se realizó un **CRUD completo** para manipular datos desde Java.
+
+---
+
+### 🔗 Webgrafía
+- [Documentación JDBC – Oracle](https://docs.oracle.com/javase/8/docs/api/java/sql/package-summary.html)  
+- [Ejemplo de conexión JDBC en Java – decodigo.com](http://decodigo.com/java-conexion-a-base-de-datos-con-jdbc)
+
+---
+
+## 🖥️ **Fin del Tema 4**
