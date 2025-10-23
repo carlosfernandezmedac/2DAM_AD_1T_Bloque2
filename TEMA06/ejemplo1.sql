@@ -113,21 +113,38 @@ select * from detalle_pedido;
 
 
 
+/* ON UPDATE/DELETE CASCADE
+Significa que si cambias el valor de la clave primaria en la tabla padre,
+MySQL actualizará automáticamente ese valor en todas las tablas hijas que lo referencien.
+
+Supongamos que quieres que, si cambia el id_cliente en la tabla cliente,
+se actualicen automáticamente los registros relacionados en la tabla pedido.
+
+Primero debes eliminar la restricción antigua y volver a crearla con ON UPDATE CASCADE*/
+
+ALTER TABLE pedido
+DROP FOREIGN KEY pedido_ibfk_1;  -- Elimina la FK anterior (nombre puede variar)
+
+ALTER TABLE pedido
+ADD CONSTRAINT fk_pedido_cliente
+FOREIGN KEY (id_cliente) REFERENCES cliente(id_cliente)
+ON UPDATE CASCADE;
 
 
-/*
--- ALTER TABLE detalle_pedido DROP FOREIGN KEY fk_detalle_pedido;
--- ALTER TABLE detalle_pedido DROP FOREIGN KEY detalle_pedido_ibfk_2;
+-- Mira cómo están ahora los datos:
 
-ALTER TABLE detalle_pedido
-ADD CONSTRAINT fk_detalle_pedido
-FOREIGN KEY (id_producto) REFERENCES producto(id_producto)
-ON DELETE CASCADE ON UPDATE CASCADE;
+SELECT * FROM cliente;
+SELECT * FROM pedido;
 
--- Borrar un producto
-DELETE FROM producto WHERE nombre = 'Ratón';
 
--- REPLACE (si el cliente ya existiera, lo reemplaza)
-REPLACE INTO cliente (id_cliente, nombre, ciudad, edad) VALUES (2, 'Carlos Ruiz', 'Córdoba', 46);*/ 
+-- Cambia el id_cliente de “Ana López” (por ejemplo, de 1 a 10):
+
+UPDATE cliente SET id_cliente = 10 WHERE nombre = 'Ana López';
+
+
+-- Verifica el resultado:
+
+SELECT * FROM pedido;
+
 
 

@@ -3,7 +3,8 @@
 ## 📘 Contenidos del Bloque 2 - Manejo de conectores
 
 - [**Tema 6:** Manejo de conectores III: Sentencias](TEMA06/APUNTES.md) 
-- [**Tema 4:** Modelo entidad-relación extendido](TEMA04/APUNTES.md) 
+- [**Tema 4:** Manejo de conectores I](TEMA04/APUNTES.md) 
+- [**Tema 5:** Manejo de conectores II](TEMA05/APUNTES.md) 
 
 ---
 
