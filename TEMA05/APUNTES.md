@@ -95,6 +95,7 @@ Vamos a configurar una **base de datos H2 en memoria** paso a paso 👇
 3. Añade las dependencias:
    - `Spring Web`
    - `H2 Database`
+   - `Spring Data JPA`
 4. Pulsa **“Generate”** para descargar el proyecto.
 
 ---
